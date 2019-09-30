@@ -17,5 +17,12 @@ namespace TenancyPlatform.Contexts
         }
 
         public DbSet<RealEstate> RealEstates { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Advert> Adverts { get; set; }
+        public DbSet<Failure> Failures { get; set; }
     }
 }
