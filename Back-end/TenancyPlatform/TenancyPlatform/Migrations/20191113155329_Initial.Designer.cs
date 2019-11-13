@@ -10,8 +10,8 @@ using TenancyPlatform.Contexts;
 namespace TenancyPlatform.Migrations
 {
     [DbContext(typeof(TenancyContext))]
-    [Migration("20190930212820_FixMessage")]
-    partial class FixMessage
+    [Migration("20191113155329_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,42 +23,42 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.Advert", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description");
 
                     b.Property<double>("LoanPrice");
 
-                    b.Property<string>("OwnerId");
+                    b.Property<int?>("OwnerId");
 
-                    b.Property<string>("RealEstateId");
-
-                    b.Property<int?>("RealEstateId1");
+                    b.Property<int?>("RealEstateId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("RealEstateId1");
+                    b.HasIndex("RealEstateId");
 
                     b.ToTable("Adverts");
                 });
 
             modelBuilder.Entity("TenancyPlatform.Models.Contract", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("LandlordId");
+                    b.Property<int?>("LandlordId");
 
                     b.Property<double>("Price");
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<string>("TenantId");
+                    b.Property<int?>("TenantId");
 
                     b.HasKey("Id");
 
@@ -71,16 +71,17 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.Failure", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContractId");
+                    b.Property<int?>("ContractId");
 
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsFixed");
 
-                    b.Property<string>("ReporterId");
+                    b.Property<int?>("ReporterId");
 
                     b.HasKey("Id");
 
@@ -93,16 +94,17 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.Message", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content");
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("ReceiverId");
+                    b.Property<int?>("ReceiverId");
 
-                    b.Property<string>("SenderId");
+                    b.Property<int?>("SenderId");
 
                     b.HasKey("Id");
 
@@ -115,14 +117,15 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.Payment", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BeneficiaryId");
+                    b.Property<int?>("BeneficiaryId");
 
-                    b.Property<string>("ContractId");
+                    b.Property<int?>("ContractId");
 
-                    b.Property<string>("PayerId");
+                    b.Property<int?>("PayerId");
 
                     b.Property<int>("PaymentStatus");
 
@@ -166,14 +169,15 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.Service", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Amount");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("PaymentId");
+                    b.Property<int?>("PaymentId");
 
                     b.HasKey("Id");
 
@@ -184,12 +188,17 @@ namespace TenancyPlatform.Migrations
 
             modelBuilder.Entity("TenancyPlatform.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -204,7 +213,7 @@ namespace TenancyPlatform.Migrations
 
                     b.HasOne("TenancyPlatform.Models.RealEstate", "RealEstate")
                         .WithMany()
-                        .HasForeignKey("RealEstateId1");
+                        .HasForeignKey("RealEstateId");
                 });
 
             modelBuilder.Entity("TenancyPlatform.Models.Contract", b =>

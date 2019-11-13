@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Service>> GetService(string id)
+        public async Task<ActionResult<Service>> GetService(int id)
         {
             var service = await _context.Services.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Services/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutService(string id, Service service)
+        public async Task<IActionResult> PutService(int id, Service service)
         {
             if (id != service.Id)
             {
@@ -84,7 +84,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Service>> DeleteService(string id)
+        public async Task<ActionResult<Service>> DeleteService(int id)
         {
             var service = await _context.Services.FindAsync(id);
             if (service == null)
@@ -98,7 +98,7 @@ namespace TenancyPlatform.Controllers
             return service;
         }
 
-        private bool ServiceExists(string id)
+        private bool ServiceExists(int id)
         {
             return _context.Services.Any(e => e.Id == id);
         }

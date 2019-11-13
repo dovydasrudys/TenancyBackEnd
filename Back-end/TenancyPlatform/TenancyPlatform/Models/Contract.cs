@@ -7,15 +7,15 @@ namespace TenancyPlatform.Models
 {
     public class Contract
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public double Price { get; set; }   // amount to pay per month
         public DateTime Start { get; set; }
         public int Duration { get; set; }   // duration in months
 
-        public string TenantId { get; set; }
+        public int? TenantId { get; set; }
         public User Tenant { get; set; }
 
-        public string LandlordId { get; set; }
+        public int? LandlordId { get; set; }
         public User Landlord { get; set; }
     }
 }

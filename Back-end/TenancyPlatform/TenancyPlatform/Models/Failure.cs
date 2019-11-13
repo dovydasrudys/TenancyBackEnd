@@ -7,14 +7,14 @@ namespace TenancyPlatform.Models
 {
     public class Failure
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         public bool IsFixed { get; set; }
 
-        public string ReporterId { get; set; }
+        public int? ReporterId { get; set; }
         public User Reporter { get; set; }
 
-        public string ContractId { get; set; }
+        public int? ContractId { get; set; }
         public Contract Contract { get; set; }
     }
 }

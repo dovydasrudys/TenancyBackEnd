@@ -1,19 +1,43 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TenancyPlatform.Migrations
 {
-    public partial class ModelsCreated : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "RealEstates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Country = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    Street = table.Column<string>(nullable: true),
+                    HouseNr = table.Column<string>(nullable: true),
+                    Area = table.Column<double>(nullable: false),
+                    Rooms = table.Column<int>(nullable: false),
+                    Floor = table.Column<int>(nullable: false),
+                    BuildYear = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RealEstates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -24,12 +48,12 @@ namespace TenancyPlatform.Migrations
                 name: "Adverts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     LoanPrice = table.Column<double>(nullable: false),
-                    OwnerId = table.Column<string>(nullable: true),
-                    RealEstateId = table.Column<string>(nullable: true),
-                    RealEstateId1 = table.Column<int>(nullable: true)
+                    OwnerId = table.Column<int>(nullable: true),
+                    RealEstateId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,8 +65,8 @@ namespace TenancyPlatform.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Adverts_RealEstates_RealEstateId1",
-                        column: x => x.RealEstateId1,
+                        name: "FK_Adverts_RealEstates_RealEstateId",
+                        column: x => x.RealEstateId,
                         principalTable: "RealEstates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -52,12 +76,13 @@ namespace TenancyPlatform.Migrations
                 name: "Contracts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Price = table.Column<double>(nullable: false),
                     Start = table.Column<DateTime>(nullable: false),
                     Duration = table.Column<int>(nullable: false),
-                    TenantId = table.Column<string>(nullable: true),
-                    LandlordId = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(nullable: true),
+                    LandlordId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,24 +105,25 @@ namespace TenancyPlatform.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    SenderId = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    SenderId = table.Column<int>(nullable: true),
+                    ReceiverId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_SenderId",
-                        column: x => x.SenderId,
+                        name: "FK_Messages_Users_ReceiverId",
+                        column: x => x.ReceiverId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Messages_Users_SenderId",
+                        column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -107,11 +133,12 @@ namespace TenancyPlatform.Migrations
                 name: "Failures",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     IsFixed = table.Column<bool>(nullable: false),
-                    ReporterId = table.Column<string>(nullable: true),
-                    ContractId = table.Column<string>(nullable: true)
+                    ReporterId = table.Column<int>(nullable: true),
+                    ContractId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,11 +161,12 @@ namespace TenancyPlatform.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PaymentStatus = table.Column<int>(nullable: false),
-                    ContractId = table.Column<string>(nullable: true),
-                    PayerId = table.Column<string>(nullable: true),
-                    BeneficiaryId = table.Column<string>(nullable: true)
+                    ContractId = table.Column<int>(nullable: true),
+                    PayerId = table.Column<int>(nullable: true),
+                    BeneficiaryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -167,10 +195,11 @@ namespace TenancyPlatform.Migrations
                 name: "Services",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     Amount = table.Column<double>(nullable: false),
-                    PaymentId = table.Column<string>(nullable: true)
+                    PaymentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -189,9 +218,9 @@ namespace TenancyPlatform.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Adverts_RealEstateId1",
+                name: "IX_Adverts_RealEstateId",
                 table: "Adverts",
-                column: "RealEstateId1");
+                column: "RealEstateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contracts_LandlordId",
@@ -214,14 +243,14 @@ namespace TenancyPlatform.Migrations
                 column: "ReporterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_ReceiverId",
+                table: "Messages",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",
                 table: "Messages",
                 column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_UserId",
-                table: "Messages",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_BeneficiaryId",
@@ -257,6 +286,9 @@ namespace TenancyPlatform.Migrations
 
             migrationBuilder.DropTable(
                 name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "RealEstates");
 
             migrationBuilder.DropTable(
                 name: "Payments");

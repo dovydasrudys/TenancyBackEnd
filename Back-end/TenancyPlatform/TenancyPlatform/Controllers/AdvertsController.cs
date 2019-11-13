@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Adverts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Advert>> GetAdvert(string id)
+        public async Task<ActionResult<Advert>> GetAdvert(int id)
         {
             var advert = await _context.Adverts.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Adverts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdvert(string id, Advert advert)
+        public async Task<IActionResult> PutAdvert(int id, Advert advert)
         {
             if (id != advert.Id)
             {
@@ -84,7 +84,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Adverts/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Advert>> DeleteAdvert(string id)
+        public async Task<ActionResult<Advert>> DeleteAdvert(int id)
         {
             var advert = await _context.Adverts.FindAsync(id);
             if (advert == null)
@@ -98,7 +98,7 @@ namespace TenancyPlatform.Controllers
             return advert;
         }
 
-        private bool AdvertExists(string id)
+        private bool AdvertExists(int id)
         {
             return _context.Adverts.Any(e => e.Id == id);
         }

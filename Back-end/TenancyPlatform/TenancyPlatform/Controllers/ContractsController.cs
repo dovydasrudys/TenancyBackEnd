@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Contracts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contract>> GetContract(string id)
+        public async Task<ActionResult<Contract>> GetContract(int id)
         {
             var contract = await _context.Contracts.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Contracts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContract(string id, Contract contract)
+        public async Task<IActionResult> PutContract(int id, Contract contract)
         {
             if (id != contract.Id)
             {
@@ -84,7 +84,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Contracts/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Contract>> DeleteContract(string id)
+        public async Task<ActionResult<Contract>> DeleteContract(int id)
         {
             var contract = await _context.Contracts.FindAsync(id);
             if (contract == null)
@@ -98,7 +98,7 @@ namespace TenancyPlatform.Controllers
             return contract;
         }
 
-        private bool ContractExists(string id)
+        private bool ContractExists(int id)
         {
             return _context.Contracts.Any(e => e.Id == id);
         }

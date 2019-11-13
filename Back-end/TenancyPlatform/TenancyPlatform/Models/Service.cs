@@ -7,11 +7,11 @@ namespace TenancyPlatform.Models
 {
     public class Service
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         public double Amount { get; set; }
         
-        public string PaymentId { get; set; }
+        public int? PaymentId { get; set; }
         public Payment Payment { get; set; }
     }
 }

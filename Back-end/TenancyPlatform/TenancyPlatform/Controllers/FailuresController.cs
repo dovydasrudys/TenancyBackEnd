@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Failures/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Failure>> GetFailure(string id)
+        public async Task<ActionResult<Failure>> GetFailure(int id)
         {
             var failure = await _context.Failures.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Failures/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFailure(string id, Failure failure)
+        public async Task<IActionResult> PutFailure(int id, Failure failure)
         {
             if (id != failure.Id)
             {
@@ -84,7 +84,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Failures/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Failure>> DeleteFailure(string id)
+        public async Task<ActionResult<Failure>> DeleteFailure(int id)
         {
             var failure = await _context.Failures.FindAsync(id);
             if (failure == null)
@@ -98,7 +98,7 @@ namespace TenancyPlatform.Controllers
             return failure;
         }
 
-        private bool FailureExists(string id)
+        private bool FailureExists(int id)
         {
             return _context.Failures.Any(e => e.Id == id);
         }

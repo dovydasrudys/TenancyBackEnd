@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(string id)
+        public async Task<ActionResult<Message>> GetMessage(int id)
         {
             var message = await _context.Messages.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Messages/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(string id, Message message)
+        public async Task<IActionResult> PutMessage(int id, Message message)
         {
             if (id != message.Id)
             {
@@ -85,7 +85,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Messages/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Message>> DeleteMessage(string id)
+        public async Task<ActionResult<Message>> DeleteMessage(int id)
         {
             var message = await _context.Messages.FindAsync(id);
             if (message == null)
@@ -99,7 +99,7 @@ namespace TenancyPlatform.Controllers
             return message;
         }
 
-        private bool MessageExists(string id)
+        private bool MessageExists(int id)
         {
             return _context.Messages.Any(e => e.Id == id);
         }

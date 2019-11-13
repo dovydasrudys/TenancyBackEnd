@@ -30,7 +30,7 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Payments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Payment>> GetPayment(string id)
+        public async Task<ActionResult<Payment>> GetPayment(int id)
         {
             var payment = await _context.Payments.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace TenancyPlatform.Controllers
 
         // PUT: api/Payments/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPayment(string id, Payment payment)
+        public async Task<IActionResult> PutPayment(int id, Payment payment)
         {
             if (id != payment.Id)
             {
@@ -84,7 +84,7 @@ namespace TenancyPlatform.Controllers
 
         // DELETE: api/Payments/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Payment>> DeletePayment(string id)
+        public async Task<ActionResult<Payment>> DeletePayment(int id)
         {
             var payment = await _context.Payments.FindAsync(id);
             if (payment == null)
@@ -98,7 +98,7 @@ namespace TenancyPlatform.Controllers
             return payment;
         }
 
-        private bool PaymentExists(string id)
+        private bool PaymentExists(int id)
         {
             return _context.Payments.Any(e => e.Id == id);
         }
