@@ -2,23 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TenancyPlatform.Contexts;
 using TenancyPlatform.Models;
+using TenancyPlatform.Services;
 
 namespace TenancyPlatform.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly TenancyContext _context;
+        private IUserService _userService;
 
-        public UsersController(TenancyContext context)
+        public UsersController(TenancyContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]User userParam)
+        {
+            AuthenticatedUser authenticatedUser = _userService.Authenticate(userParam.UserName, userParam.Password);
+
+            if (authenticatedUser == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(authenticatedUser);
         }
 
         // GET: api/Users
@@ -73,6 +92,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/Users
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
