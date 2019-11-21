@@ -58,6 +58,11 @@ namespace TenancyPlatform
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+            })
+            .AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
 
             // configure DI for application services
