@@ -16,6 +16,7 @@ namespace TenancyPlatform.Services
     public interface IUserService
     {
         AuthenticatedUser Authenticate(string username, string password);
+        string GenerateJwtToken(string id);
         IEnumerable<User> GetAll();
     }
 
@@ -39,18 +40,6 @@ namespace TenancyPlatform.Services
                 return null;
 
             // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
 
             AuthenticatedUser authenticatedUser = new AuthenticatedUser()
             {
@@ -58,7 +47,7 @@ namespace TenancyPlatform.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
-                Token = tokenHandler.WriteToken(token)
+                Token = GenerateJwtToken(user.Id.ToString())
             };
 
             return authenticatedUser;
@@ -71,6 +60,24 @@ namespace TenancyPlatform.Services
                 x.Password = null;
                 return x;
             });
+        }
+
+        public string GenerateJwtToken(string userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, userId)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }

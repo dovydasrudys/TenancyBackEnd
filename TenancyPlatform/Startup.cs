@@ -32,6 +32,7 @@ namespace TenancyPlatform
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<TenancyContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:Tenancy"]));
 
@@ -82,7 +83,15 @@ namespace TenancyPlatform
                 app.UseHsts();
             }
 
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<TenancyContext> ();
+                context.Database.Migrate();
+            }
+
             app.UseHttpsRedirection();
+
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
 
             app.UseAuthentication();

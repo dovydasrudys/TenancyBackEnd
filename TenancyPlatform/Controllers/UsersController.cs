@@ -48,17 +48,15 @@ namespace TenancyPlatform.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("facebook")]
-        public async Task<ActionResult> AuthenticateFacebookUser()
+        [HttpPost("facebook")]
+        public async Task<ActionResult> AuthenticateFacebookUser([FromBody]FacebookAuthenticationCode code)
         {
-            string authenticationCode = HttpContext.Request.Query.First(q => q.Key == "code").Value;
-
             HttpClient httpClient = new HttpClient();
             string clientId = _configuration["Authentication:Facebook:AppId"];
             string clientSecret = _configuration["Authentication:Facebook:AppSecret"];
-            string redirectUri = "https://localhost:44318/api/users/facebook";
+            string redirectUri = "https://localhost:3000/login";
 
-            var response = await httpClient.GetAsync("https://graph.facebook.com/v5.0/oauth/access_token" + $"?client_id={clientId}&redirect_uri={redirectUri}&client_secret={clientSecret}&code={authenticationCode}");
+            var response = await httpClient.GetAsync("https://graph.facebook.com/v5.0/oauth/access_token" + $"?client_id={clientId}&redirect_uri={redirectUri}&client_secret={clientSecret}&code={code.code}");
 
             string facebookToken = "";
             long id;
@@ -93,7 +91,7 @@ namespace TenancyPlatform.Controllers
                 throw new Exception("Error receiving FB access token");
             }
 
-            return Ok(new {id, first_name, last_name, email, facebookToken});
+            return Ok(new {id, first_name, last_name, email, facebookToken, appToken = _userService.GenerateJwtToken(id.ToString())});
         }
 
         // GET: api/Users
