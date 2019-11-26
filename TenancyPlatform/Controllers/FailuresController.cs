@@ -49,6 +49,7 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFailure(int id, Failure failure)
         {
+
             if (id != failure.Id)
             {
                 return BadRequest();
@@ -76,6 +77,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/Failures
+        [Authorize(Roles = "tenant")]
         [HttpPost]
         public async Task<ActionResult<Failure>> PostFailure(Failure failure)
         {
@@ -86,6 +88,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // DELETE: api/Failures/5
+        [Authorize(Roles = "tenant")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Failure>> DeleteFailure(int id)
         {

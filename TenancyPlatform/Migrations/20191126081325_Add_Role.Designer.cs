@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TenancyPlatform.Contexts;
 
 namespace TenancyPlatform.Migrations
 {
     [DbContext(typeof(TenancyContext))]
-    partial class TenancyContextModelSnapshot : ModelSnapshot
+    [Migration("20191126081325_Add_Role")]
+    partial class Add_Role
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,7 +198,7 @@ namespace TenancyPlatform.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<string>("Role");
+                    b.Property<int>("Role");
 
                     b.Property<string>("UserName");
 

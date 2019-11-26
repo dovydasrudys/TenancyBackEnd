@@ -46,9 +46,13 @@ namespace TenancyPlatform.Controllers
         }
 
         // PUT: api/Contracts/5
+        [Authorize(Roles = "landlord")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContract(int id, Contract contract)
         {
+            if (User.FindFirst("id").Value != contract.LandlordId.ToString())
+                return Unauthorized();
+
             if (id != contract.Id)
             {
                 return BadRequest();
@@ -76,6 +80,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/Contracts
+        [Authorize(Roles = "landlord")]
         [HttpPost]
         public async Task<ActionResult<Contract>> PostContract(Contract contract)
         {
@@ -86,10 +91,15 @@ namespace TenancyPlatform.Controllers
         }
 
         // DELETE: api/Contracts/5
+        [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Contract>> DeleteContract(int id)
         {
             var contract = await _context.Contracts.FindAsync(id);
+
+            if (User.FindFirst("id").Value != contract.LandlordId.ToString())
+                return Unauthorized();
+
             if (contract == null)
             {
                 return NotFound();

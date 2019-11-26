@@ -91,7 +91,7 @@ namespace TenancyPlatform.Controllers
                 throw new Exception("Error receiving FB access token");
             }
 
-            return Ok(new {id, first_name, last_name, email, facebookToken, appToken = _userService.GenerateJwtToken(id.ToString())});
+            return Ok(new {id, first_name, last_name, email, facebookToken, appToken = _userService.GenerateJwtToken(new User() { Id= 8, Role = "tenant" })});
         }
 
         // GET: api/Users

@@ -26,3 +26,19 @@ C:\Users\Dovydas\Desktop\TenancyPlatform\TenancyBackEnd\TenancyPlatform\obj\Debu
 C:\Users\Dovydas\Desktop\TenancyPlatform\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorTargetAssemblyInfo.cache
 C:\Users\Dovydas\Desktop\TenancyPlatform\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.dll
 C:\Users\Dovydas\Desktop\TenancyPlatform\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.pdb
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\appsettings.Development.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.deps.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.runtimeconfig.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.runtimeconfig.dev.json
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.dll
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.pdb
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.csprojAssemblyReference.cache
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorAssemblyInfo.cache
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorAssemblyInfo.cs
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.AssemblyInfoInputs.cache
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.AssemblyInfo.cs
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorTargetAssemblyInfo.cache
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.dll
+C:\Users\Stud\Desktop\New folder\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.pdb

@@ -49,6 +49,7 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRealEstate(int id, RealEstate realEstate)
         {
+
             if (id != realEstate.Id)
             {
                 return BadRequest();
@@ -76,6 +77,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/RealEstates
+        [Authorize(Roles = "landlord")]
         [HttpPost]
         public async Task<ActionResult<RealEstate>> PostRealEstate(RealEstate realEstate)
         {

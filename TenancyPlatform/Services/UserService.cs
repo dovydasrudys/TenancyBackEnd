@@ -16,7 +16,7 @@ namespace TenancyPlatform.Services
     public interface IUserService
     {
         AuthenticatedUser Authenticate(string username, string password);
-        string GenerateJwtToken(string id);
+        string GenerateJwtToken(User user);
         IEnumerable<User> GetAll();
     }
 
@@ -47,7 +47,7 @@ namespace TenancyPlatform.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
-                Token = GenerateJwtToken(user.Id.ToString())
+                Token = GenerateJwtToken(user)
             };
 
             return authenticatedUser;
@@ -62,7 +62,7 @@ namespace TenancyPlatform.Services
             });
         }
 
-        public string GenerateJwtToken(string userId)
+        public string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -70,7 +70,8 @@ namespace TenancyPlatform.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, userId)
+                    new Claim("id", user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

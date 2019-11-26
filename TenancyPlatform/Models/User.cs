@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace TenancyPlatform.Models
 {
-    public enum Role { Tenant, Landlord }
 
     public class User
     {
@@ -14,5 +13,6 @@ namespace TenancyPlatform.Models
         public string LastName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
     }
 }

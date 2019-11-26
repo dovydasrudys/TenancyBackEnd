@@ -46,9 +46,13 @@ namespace TenancyPlatform.Controllers
         }
 
         // PUT: api/Adverts/5
+        [Authorize(Roles = "landlord")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAdvert(int id, Advert advert)
         {
+            if (User.FindFirst("id").Value != advert.OwnerId.ToString())
+                return Unauthorized();
+
             if (id != advert.Id)
             {
                 return BadRequest();
@@ -76,6 +80,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/Adverts
+        [Authorize(Roles = "landlord")]
         [HttpPost]
         public async Task<ActionResult<Advert>> PostAdvert(Advert advert)
         {
@@ -86,10 +91,18 @@ namespace TenancyPlatform.Controllers
         }
 
         // DELETE: api/Adverts/5
+        [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Advert>> DeleteAdvert(int id)
         {
+
+            
+
             var advert = await _context.Adverts.FindAsync(id);
+
+            if (User.FindFirst("id").Value != advert.OwnerId.ToString())
+                return Unauthorized();
+
             if (advert == null)
             {
                 return NotFound();
