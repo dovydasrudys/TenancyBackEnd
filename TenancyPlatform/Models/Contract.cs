@@ -17,5 +17,8 @@ namespace TenancyPlatform.Models
 
         public int? LandlordId { get; set; }
         public User Landlord { get; set; }
+
+        public int? RealEstateId { get; set; }
+        public RealEstate RealEstate { get; set; }
     }
 }
