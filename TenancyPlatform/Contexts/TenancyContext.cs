@@ -68,6 +68,33 @@ namespace TenancyPlatform.Contexts
                 }
             );
 
+            modelBuilder.Entity<Advert>().HasData(
+                new Advert
+                {
+                    Id = 1,
+                    Description = "Puikus butas. Arti mokykla.",
+                    LoanPrice = 300,
+                    OwnerId = 1,
+                    RealEstateId = 1
+                },
+                new Advert
+                {
+                    Id = 2,
+                    Description = "",
+                    LoanPrice = 220,
+                    OwnerId = 2,
+                    RealEstateId = 2
+                },
+                new Advert
+                {
+                    Id = 3,
+                    Description = "Išnuomuojame ilgalaikei nuomai butą varpų 11-36, šalia prekybos centro, butas labai šiltas ir sauletas, rakinama laiptine, patogus susisiekimas aplink daug mokyklų, su baldais.",
+                    LoanPrice = 230,
+                    OwnerId = 3,
+                    RealEstateId = 3
+                }
+            );
+
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -152,6 +179,63 @@ namespace TenancyPlatform.Contexts
                     Start = new DateTime(2019, 02, 01),
                     Duration = 12,
                     Price = 300
+                }
+            );
+
+            modelBuilder.Entity<Service>().HasData(
+                new Service
+                {
+                    Id = 1,
+                    Amount = 15,
+                    Description = "Internetas už 2019 02 mėn.",
+                    PaymentId = 1
+                },
+                new Service
+                {
+                    Id = 2,
+                    Amount = 50,
+                    Description = "Šildymas už 2019 02 mėn.",
+                    PaymentId = 1
+                },
+                new Service
+                {
+                    Id = 3,
+                    Amount = 26,
+                    Description = "Elektra už 2019 02 mėn.",
+                    PaymentId = 1
+                },
+                new Service
+                {
+                    Id = 4,
+                    Amount = 123.15,
+                    Description = "Komunaliniai už 2019 03 mėn.",
+                    PaymentId = 2
+                }
+            );
+
+            modelBuilder.Entity<Payment>().HasData(
+                new Payment
+                {
+                    Id = 1,
+                    ContractId = 1,
+                    PaymentStatus = PaymentStatus.Paid
+                },
+                new Payment
+                {
+                    Id = 2,
+                    ContractId = 1,
+                    PaymentStatus = PaymentStatus.NotPaid
+                }
+            );
+
+            modelBuilder.Entity<Failure>().HasData(
+                new Failure
+                {
+                    Id = 1,
+                    ContractId = 1,
+                    Description = "Sugedusi durų spyna",
+                    ReporterId = 3,
+                    IsFixed = false,
                 }
             );
         }

@@ -15,12 +15,6 @@ namespace TenancyPlatform.Models
         public int? ContractId { get; set; }
         public Contract Contract { get; set; }
 
-        public int? PayerId { get; set; }
-        public User Payer { get; set; }
-
-        public int? BeneficiaryId { get; set; }
-        public User Beneficiary { get; set; }
-
         public List<Service> Services { get; set; }
     }
 }
