@@ -46,9 +46,12 @@ namespace TenancyPlatform.Controllers
         }
 
         // PUT: api/RealEstates/5
+        [Authorize(Roles = "landlord")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRealEstate(int id, RealEstate realEstate)
         {
+            if (User.FindFirst("id").Value != realEstate.OwnerId.ToString())
+                return Unauthorized();
 
             if (id != realEstate.Id)
             {
@@ -88,6 +91,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // DELETE: api/RealEstates/5
+        [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RealEstate>> DeleteRealEstate(int id)
         {
@@ -96,6 +100,9 @@ namespace TenancyPlatform.Controllers
             {
                 return NotFound();
             }
+
+            if (User.FindFirst("id").Value != realEstate.OwnerId.ToString())
+                return Unauthorized();
 
             _context.RealEstates.Remove(realEstate);
             await _context.SaveChangesAsync();

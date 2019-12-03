@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TenancyPlatform.Contexts;
 
 namespace TenancyPlatform.Migrations
 {
     [DbContext(typeof(TenancyContext))]
-    partial class TenancyContextModelSnapshot : ModelSnapshot
+    [Migration("20191202203830_Add_Owner_to_RealEstate")]
+    partial class Add_Owner_to_RealEstate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

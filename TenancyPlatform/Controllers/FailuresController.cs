@@ -46,14 +46,18 @@ namespace TenancyPlatform.Controllers
         }
 
         // PUT: api/Failures/5
+        [Authorize(Roles = "tenant")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFailure(int id, Failure failure)
         {
-
+            
             if (id != failure.Id)
             {
                 return BadRequest();
             }
+
+            if (User.FindFirst("id").Value != failure.ReporterId.ToString())
+                return Unauthorized();
 
             _context.Entry(failure).State = EntityState.Modified;
 
@@ -97,6 +101,9 @@ namespace TenancyPlatform.Controllers
             {
                 return NotFound();
             }
+
+            if (User.FindFirst("id").Value != failure.ReporterId.ToString())
+                return Unauthorized();
 
             _context.Failures.Remove(failure);
             await _context.SaveChangesAsync();

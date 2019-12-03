@@ -54,7 +54,7 @@ namespace TenancyPlatform.Controllers
             HttpClient httpClient = new HttpClient();
             string clientId = _configuration["Authentication:Facebook:AppId"];
             string clientSecret = _configuration["Authentication:Facebook:AppSecret"];
-            string redirectUri = "https://localhost:3000/login";
+            string redirectUri = "http://localhost:3000/login";
 
             var response = await httpClient.GetAsync("https://graph.facebook.com/v5.0/oauth/access_token" + $"?client_id={clientId}&redirect_uri={redirectUri}&client_secret={clientSecret}&code={code.code}");
 
@@ -80,25 +80,61 @@ namespace TenancyPlatform.Controllers
                     first_name = myJObject.SelectToken("first_name").Value<string>();
                     last_name = myJObject.SelectToken("last_name").Value<string>();
                     email = myJObject.SelectToken("email").Value<string>();
+
+                    User user;
+                    if (UserExists(email))
+                    {
+                        user = _context.Users.First(x => x.UserName == email);
+                    }
+                    else
+                    {
+                        user = new User
+                        {
+                            FirstName = first_name,
+                            LastName = last_name,
+                            UserName = email,
+                            Role = "tenant"
+                        };
+
+                        _context.Users.Add(user);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    AuthenticatedUser authenticatedUser = new AuthenticatedUser
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        UserName = user.UserName,
+                        Role = user.Role,
+                        Token = _userService.GenerateJwtToken(user)
+                    };
+
+                    return Ok(authenticatedUser);
                 }
                 else
                 {
-                    throw new Exception("Error receiving information about user from facebook");
+                    return Unauthorized(new { message = "Could not receive information about user from facebook." });
                 }
             }
             else
             {
-                throw new Exception("Error receiving FB access token");
+                return Unauthorized(new { message = "Could not receive Facebook access token" });
             }
-
-            return Ok(new {id, first_name, last_name, email, facebookToken, appToken = _userService.GenerateJwtToken(new User() { Id= 8, Role = "tenant" })});
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Select(x => new User
+            {
+                Id = x.Id,
+                UserName = x.UserName,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Role = x.Role
+            }).ToListAsync();
         }
 
         // GET: api/Users/5
@@ -112,6 +148,7 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
+            user.Password = "";
             return user;
         }
 
@@ -119,6 +156,9 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
+            if (User.FindFirst("id").Value != id.ToString())
+                return Unauthorized();
+
             if (id != user.Id)
             {
                 return BadRequest();
@@ -150,6 +190,7 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            user.Role = "tenant";
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -160,6 +201,9 @@ namespace TenancyPlatform.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
+            if (User.FindFirst("id").Value != id.ToString())
+                return Unauthorized();
+
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
@@ -175,6 +219,11 @@ namespace TenancyPlatform.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+
+        private bool UserExists(string userName)
+        {
+            return _context.Users.Any(e => e.UserName == userName);
         }
     }
 }

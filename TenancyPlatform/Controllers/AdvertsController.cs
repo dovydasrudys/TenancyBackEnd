@@ -25,6 +25,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // GET: api/Adverts
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Advert>>> GetAdverts()
         {
@@ -32,6 +33,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // GET: api/Adverts/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Advert>> GetAdvert(int id)
         {
@@ -95,9 +97,6 @@ namespace TenancyPlatform.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Advert>> DeleteAdvert(int id)
         {
-
-            
-
             var advert = await _context.Adverts.FindAsync(id);
 
             if (User.FindFirst("id").Value != advert.OwnerId.ToString())

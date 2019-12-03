@@ -28,78 +28,23 @@ namespace TenancyPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
         {
-            return await _context.Messages.ToListAsync();
-        }
+            string userId = User.FindFirst("id").Value;
 
-        // GET: api/Messages/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
-        {
-            var message = await _context.Messages.FindAsync(id);
-
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return message;
-        }
-
-        // PUT: api/Messages/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(int id, Message message)
-        {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(message).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return await _context.Messages.Where(m => m.SenderId.ToString() == userId || m.ReceiverId.ToString() == userId).ToListAsync();
         }
 
         // POST: api/Messages
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(Message message)
         {
+            string userId = User.FindFirst("id").Value;
+
+            message.SenderId = int.Parse(userId);
             message.Date = DateTime.UtcNow;
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMessage", new { id = message.Id }, message);
-        }
-
-        // DELETE: api/Messages/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Message>> DeleteMessage(int id)
-        {
-            var message = await _context.Messages.FindAsync(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            _context.Messages.Remove(message);
-            await _context.SaveChangesAsync();
-
-            return message;
         }
 
         private bool MessageExists(int id)

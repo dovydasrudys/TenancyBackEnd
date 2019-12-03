@@ -45,36 +45,6 @@ namespace TenancyPlatform.Controllers
             return service;
         }
 
-        // PUT: api/Services/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutService(int id, Service service)
-        {
-            if (id != service.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(service).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ServiceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Services
         [HttpPost]
         public async Task<ActionResult<Service>> PostService(Service service)
@@ -89,13 +59,16 @@ namespace TenancyPlatform.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Service>> DeleteService(int id)
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = await _context.Services.Include(s => s.Payment).ThenInclude(p => p.Contract).FirstOrDefaultAsync(s => s.Id == id);
             if (service == null)
             {
                 return NotFound();
             }
 
-            _context.Services.Remove(service);
+            if (User.FindFirst("id").Value != service.Payment.Contract.LandlordId.ToString())
+                return Unauthorized();
+
+                _context.Services.Remove(service);
             await _context.SaveChangesAsync();
 
             return service;

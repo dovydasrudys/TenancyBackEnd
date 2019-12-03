@@ -29,72 +29,6 @@ namespace TenancyPlatform.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RealEstate>().HasData(
-                new RealEstate
-                {
-                    Id = 1,
-                    Country = "Lithuania",
-                    City = "Kaunas",
-                    Street = "Veiveriu g.",
-                    HouseNr = "7",
-                    Floor = 1,
-                    Area = 80,
-                    BuildYear = 2007,
-                    Rooms = 3
-                },
-                new RealEstate
-                {
-                    Id = 2,
-                    Country = "Lithuania",
-                    City = "Kaunas",
-                    Street = "Taikos pr.",
-                    HouseNr = "56A",
-                    Floor = 6,
-                    Area = 45,
-                    BuildYear = 1999,
-                    Rooms = 1
-                },
-                new RealEstate
-                {
-                    Id = 3,
-                    Country = "Lithuania",
-                    City = "Vilnius",
-                    Street = "Šimulionio g.",
-                    HouseNr = "3",
-                    Floor = 2,
-                    Area = 60,
-                    BuildYear = 2011,
-                    Rooms = 2
-                }
-            );
-
-            modelBuilder.Entity<Advert>().HasData(
-                new Advert
-                {
-                    Id = 1,
-                    Description = "Puikus butas. Arti mokykla.",
-                    LoanPrice = 300,
-                    OwnerId = 1,
-                    RealEstateId = 1
-                },
-                new Advert
-                {
-                    Id = 2,
-                    Description = "",
-                    LoanPrice = 220,
-                    OwnerId = 2,
-                    RealEstateId = 2
-                },
-                new Advert
-                {
-                    Id = 3,
-                    Description = "Išnuomuojame ilgalaikei nuomai butą varpų 11-36, šalia prekybos centro, butas labai šiltas ir sauletas, rakinama laiptine, patogus susisiekimas aplink daug mokyklų, su baldais.",
-                    LoanPrice = 230,
-                    OwnerId = 3,
-                    RealEstateId = 3
-                }
-            );
-
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -131,6 +65,75 @@ namespace TenancyPlatform.Contexts
                     UserName = "julius@gmail.com",
                     Password = "julius",
                     Role = "tenant"
+                }
+            );
+
+            modelBuilder.Entity<RealEstate>().HasData(
+                new RealEstate
+                {
+                    Id = 1,
+                    Country = "Lithuania",
+                    City = "Kaunas",
+                    Street = "Veiveriu g.",
+                    HouseNr = "7",
+                    Floor = 1,
+                    Area = 80,
+                    BuildYear = 2007,
+                    Rooms = 3,
+                    OwnerId = 1
+                },
+                new RealEstate
+                {
+                    Id = 2,
+                    Country = "Lithuania",
+                    City = "Kaunas",
+                    Street = "Taikos pr.",
+                    HouseNr = "56A",
+                    Floor = 6,
+                    Area = 45,
+                    BuildYear = 1999,
+                    Rooms = 1,
+                    OwnerId = 1
+                },
+                new RealEstate
+                {
+                    Id = 3,
+                    Country = "Lithuania",
+                    City = "Vilnius",
+                    Street = "Šimulionio g.",
+                    HouseNr = "3",
+                    Floor = 2,
+                    Area = 60,
+                    BuildYear = 2011,
+                    Rooms = 2,
+                    OwnerId = 2
+                }
+            );
+
+            modelBuilder.Entity<Advert>().HasData(
+                new Advert
+                {
+                    Id = 1,
+                    Description = "Puikus butas. Arti mokykla.",
+                    LoanPrice = 300,
+                    OwnerId = 1,
+                    RealEstateId = 1
+                },
+                new Advert
+                {
+                    Id = 2,
+                    Description = "",
+                    LoanPrice = 220,
+                    OwnerId = 2,
+                    RealEstateId = 2
+                },
+                new Advert
+                {
+                    Id = 3,
+                    Description = "Išnuomuojame ilgalaikei nuomai butą varpų 11-36, šalia prekybos centro, butas labai šiltas ir sauletas, rakinama laiptine, patogus susisiekimas aplink daug mokyklų, su baldais.",
+                    LoanPrice = 230,
+                    OwnerId = 3,
+                    RealEstateId = 3
                 }
             );
 

@@ -50,13 +50,13 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContract(int id, Contract contract)
         {
-            if (User.FindFirst("id").Value != contract.LandlordId.ToString())
-                return Unauthorized();
-
             if (id != contract.Id)
             {
                 return BadRequest();
             }
+
+            if (User.FindFirst("id").Value != contract.LandlordId.ToString())
+                return Unauthorized();
 
             _context.Entry(contract).State = EntityState.Modified;
 

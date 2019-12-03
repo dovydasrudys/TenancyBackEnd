@@ -46,6 +46,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // PUT: api/Payments/5
+        [Authorize(Roles = "landlord")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPayment(int id, Payment payment)
         {
@@ -53,6 +54,9 @@ namespace TenancyPlatform.Controllers
             {
                 return BadRequest();
             }
+
+            if (User.FindFirst("id").Value != _context.Payments.Include(p => p.Contract).FirstOrDefault(p => p.Id == id).Contract.LandlordId.ToString())
+                return Unauthorized();
 
             _context.Entry(payment).State = EntityState.Modified;
 
@@ -76,6 +80,7 @@ namespace TenancyPlatform.Controllers
         }
 
         // POST: api/Payments
+        [Authorize(Roles = "landlord")]
         [HttpPost]
         public async Task<ActionResult<Payment>> PostPayment(Payment payment)
         {
@@ -86,14 +91,18 @@ namespace TenancyPlatform.Controllers
         }
 
         // DELETE: api/Payments/5
+        [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Payment>> DeletePayment(int id)
         {
-            var payment = await _context.Payments.FindAsync(id);
+            var payment = await _context.Payments.Include(p => p.Contract).FirstOrDefaultAsync(p => p.Id == id);
             if (payment == null)
             {
                 return NotFound();
             }
+
+            if (User.FindFirst("id").Value != payment.Contract.LandlordId.ToString())
+                return Unauthorized();
 
             _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();
