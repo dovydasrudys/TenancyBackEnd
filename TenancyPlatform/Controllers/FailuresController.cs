@@ -56,7 +56,11 @@ namespace TenancyPlatform.Controllers
                 return BadRequest();
             }
 
-            if (User.FindFirst("id").Value != failure.ReporterId.ToString())
+            Failure x = _context.Failures.AsNoTracking().FirstOrDefault(z => z.Id == id);
+            if (x == null)
+                return NotFound();
+
+            if (User.FindFirst("id").Value != x.ReporterId.ToString())
                 return Unauthorized();
 
             _context.Entry(failure).State = EntityState.Modified;

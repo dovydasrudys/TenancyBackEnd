@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Stud\\Desktop\\New folder\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj": {}
+    "C:\\Users\\Stud\\Desktop\\Tenancy\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Stud\\Desktop\\New folder\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj": {
+    "C:\\Users\\Stud\\Desktop\\Tenancy\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Stud\\Desktop\\New folder\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj",
+        "projectUniqueName": "C:\\Users\\Stud\\Desktop\\Tenancy\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj",
         "projectName": "TenancyPlatform",
-        "projectPath": "C:\\Users\\Stud\\Desktop\\New folder\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj",
+        "projectPath": "C:\\Users\\Stud\\Desktop\\Tenancy\\TenancyBackEnd\\TenancyPlatform\\TenancyPlatform.csproj",
         "packagesPath": "C:\\Users\\Stud\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Stud\\Desktop\\New folder\\TenancyBackEnd\\TenancyPlatform\\obj\\",
+        "outputPath": "C:\\Users\\Stud\\Desktop\\Tenancy\\TenancyBackEnd\\TenancyPlatform\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

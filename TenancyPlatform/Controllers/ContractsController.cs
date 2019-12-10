@@ -55,7 +55,11 @@ namespace TenancyPlatform.Controllers
                 return BadRequest();
             }
 
-            if (User.FindFirst("id").Value != contract.LandlordId.ToString())
+            Contract x = _context.Contracts.AsNoTracking().FirstOrDefault(z => z.Id == id);
+            if (x == null)
+                return NotFound();
+
+            if (User.FindFirst("id").Value != x.LandlordId.ToString())
                 return Unauthorized();
 
             _context.Entry(contract).State = EntityState.Modified;

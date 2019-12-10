@@ -52,13 +52,17 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAdvert(int id, Advert advert)
         {
-            if (User.FindFirst("id").Value != advert.OwnerId.ToString())
-                return Unauthorized();
-
             if (id != advert.Id)
             {
                 return BadRequest();
             }
+
+            Advert x = _context.Adverts.AsNoTracking().FirstOrDefault(z => z.Id == id);
+            if (x == null)
+                return NotFound();
+
+            if (User.FindFirst("id").Value != x.OwnerId.ToString())
+                return Unauthorized();
 
             _context.Entry(advert).State = EntityState.Modified;
 

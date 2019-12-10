@@ -55,7 +55,11 @@ namespace TenancyPlatform.Controllers
                 return BadRequest();
             }
 
-            if (User.FindFirst("id").Value != _context.Payments.Include(p => p.Contract).FirstOrDefault(p => p.Id == id).Contract.LandlordId.ToString())
+            Payment x = _context.Payments.AsNoTracking().Include(z => z.Contract).FirstOrDefault(z => z.Id == id);
+            if (x == null)
+                return NotFound();
+
+            if (User.FindFirst("id").Value != x.Contract.LandlordId.ToString())
                 return Unauthorized();
 
             _context.Entry(payment).State = EntityState.Modified;

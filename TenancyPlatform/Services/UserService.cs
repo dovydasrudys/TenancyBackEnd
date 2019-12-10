@@ -47,6 +47,7 @@ namespace TenancyPlatform.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
+                Role = user.Role,
                 Token = GenerateJwtToken(user)
             };
 

@@ -50,13 +50,17 @@ namespace TenancyPlatform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRealEstate(int id, RealEstate realEstate)
         {
-            if (User.FindFirst("id").Value != realEstate.OwnerId.ToString())
-                return Unauthorized();
-
             if (id != realEstate.Id)
             {
                 return BadRequest();
             }
+
+            RealEstate x = _context.RealEstates.AsNoTracking().FirstOrDefault(z => z.Id == id);
+            if (x == null)
+                return NotFound();
+
+            if (User.FindFirst("id").Value != x.OwnerId.ToString())
+                return Unauthorized();
 
             _context.Entry(realEstate).State = EntityState.Modified;
 
