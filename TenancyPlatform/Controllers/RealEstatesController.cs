@@ -26,14 +26,27 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/RealEstates
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RealEstate>>> GetRealEstates()
+        public async Task<ActionResult<IEnumerable<object>>> GetRealEstates()
         {
-            return await _context.RealEstates.ToListAsync();
+            return await _context.RealEstates.Select(re =>
+                new
+                {
+                    re.Id,
+                    re.Country,
+                    re.City,
+                    re.Street,
+                    re.HouseNr,
+                    re.Floor,
+                    re.Area,
+                    re.BuildYear,
+                    re.OwnerId
+                }
+                ).ToListAsync();
         }
 
         // GET: api/RealEstates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RealEstate>> GetRealEstate(int id)
+        public async Task<ActionResult<object>> GetRealEstate(int id)
         {
             var realEstate = await _context.RealEstates.FindAsync(id);
 
@@ -42,7 +55,18 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return realEstate;
+            return new
+            {
+                realEstate.Id,
+                realEstate.Country,
+                realEstate.City,
+                realEstate.Street,
+                realEstate.HouseNr,
+                realEstate.Floor,
+                realEstate.Area,
+                realEstate.BuildYear,
+                realEstate.OwnerId
+            };
         }
 
         // PUT: api/RealEstates/5
@@ -60,7 +84,10 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
 
             if (User.FindFirst("id").Value != x.OwnerId.ToString())
-                return Unauthorized();
+                return Forbid();
+
+            if (_context.Users.Find(realEstate.OwnerId) == null)
+                return NotFound($"Owner with id = {realEstate.OwnerId} could not be found");
 
             _context.Entry(realEstate).State = EntityState.Modified;
 
@@ -88,16 +115,30 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<RealEstate>> PostRealEstate(RealEstate realEstate)
         {
+            if (_context.Users.Find(realEstate.OwnerId) == null)
+                return NotFound($"Owner with id = {realEstate.OwnerId} could not be found");
+
             _context.RealEstates.Add(realEstate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRealEstate", new { id = realEstate.Id }, realEstate);
+            return CreatedAtAction("PostRealEstate", new
+            {
+                realEstate.Id,
+                realEstate.Country,
+                realEstate.City,
+                realEstate.Street,
+                realEstate.HouseNr,
+                realEstate.Floor,
+                realEstate.Area,
+                realEstate.BuildYear,
+                realEstate.OwnerId
+            });
         }
 
         // DELETE: api/RealEstates/5
         [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<RealEstate>> DeleteRealEstate(int id)
+        public async Task<ActionResult<object>> DeleteRealEstate(int id)
         {
             var realEstate = await _context.RealEstates.FindAsync(id);
             if (realEstate == null)
@@ -106,12 +147,23 @@ namespace TenancyPlatform.Controllers
             }
 
             if (User.FindFirst("id").Value != realEstate.OwnerId.ToString())
-                return Unauthorized();
+                return Forbid();
 
             _context.RealEstates.Remove(realEstate);
             await _context.SaveChangesAsync();
 
-            return realEstate;
+            return new
+            {
+                realEstate.Id,
+                realEstate.Country,
+                realEstate.City,
+                realEstate.Street,
+                realEstate.HouseNr,
+                realEstate.Floor,
+                realEstate.Area,
+                realEstate.BuildYear,
+                realEstate.OwnerId
+            };
         }
 
         private bool RealEstateExists(int id)

@@ -26,14 +26,21 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Payments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Payment>>> GetPayments()
+        public async Task<ActionResult<IEnumerable<object>>> GetPayments()
         {
-            return await _context.Payments.ToListAsync();
+            return await _context.Payments.Select(p =>
+                new
+                {
+                    p.Id,
+                    p.ContractId,
+                    p.PaymentStatus
+                }
+                ).ToListAsync();
         }
 
         // GET: api/Payments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Payment>> GetPayment(int id)
+        public async Task<ActionResult<object>> GetPayment(int id)
         {
             var payment = await _context.Payments.FindAsync(id);
 
@@ -42,7 +49,12 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return payment;
+            return new
+            {
+                payment.Id,
+                payment.ContractId,
+                payment.PaymentStatus
+            };
         }
 
         // PUT: api/Payments/5
@@ -60,7 +72,10 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
 
             if (User.FindFirst("id").Value != x.Contract.LandlordId.ToString())
-                return Unauthorized();
+                return Forbid();
+
+            if(_context.Contracts.Find(payment.ContractId) == null)
+                return NotFound($"Contract with id = {payment.ContractId} could not be found");
 
             _context.Entry(payment).State = EntityState.Modified;
 
@@ -88,16 +103,24 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<Payment>> PostPayment(Payment payment)
         {
+            if (_context.Contracts.Find(payment.ContractId) == null)
+                return NotFound($"Contract with id = {payment.ContractId} could not be found");
+
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPayment", new { id = payment.Id }, payment);
+            return CreatedAtAction("PostPayment", new
+            {
+                payment.Id,
+                payment.ContractId,
+                payment.PaymentStatus
+            });
         }
 
         // DELETE: api/Payments/5
         [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Payment>> DeletePayment(int id)
+        public async Task<ActionResult<object>> DeletePayment(int id)
         {
             var payment = await _context.Payments.Include(p => p.Contract).FirstOrDefaultAsync(p => p.Id == id);
             if (payment == null)
@@ -106,12 +129,17 @@ namespace TenancyPlatform.Controllers
             }
 
             if (User.FindFirst("id").Value != payment.Contract.LandlordId.ToString())
-                return Unauthorized();
+                return Forbid();
 
             _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();
 
-            return payment;
+            return new
+            {
+                payment.Id,
+                payment.ContractId,
+                payment.PaymentStatus
+            };
         }
 
         private bool PaymentExists(int id)

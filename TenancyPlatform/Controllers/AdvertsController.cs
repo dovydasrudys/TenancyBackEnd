@@ -27,15 +27,23 @@ namespace TenancyPlatform.Controllers
         // GET: api/Adverts
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Advert>>> GetAdverts()
+        public async Task<ActionResult<IEnumerable<object>>> GetAdverts()
         {
-            return await _context.Adverts.ToListAsync();
+            return await _context.Adverts.Select(a =>
+                new {
+                    a.Id,
+                    a.Description,
+                    a.LoanPrice,
+                    a.OwnerId,
+                    a.RealEstateId
+                }
+                ).ToListAsync();
         }
 
         // GET: api/Adverts/5
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Advert>> GetAdvert(int id)
+        public async Task<ActionResult<object>> GetAdvert(int id)
         {
             var advert = await _context.Adverts.FindAsync(id);
 
@@ -44,7 +52,14 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return advert;
+            return new
+            {
+                advert.Id,
+                advert.Description,
+                advert.LoanPrice,
+                advert.OwnerId,
+                advert.RealEstateId
+            };
         }
 
         // PUT: api/Adverts/5
@@ -62,7 +77,13 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
 
             if (User.FindFirst("id").Value != x.OwnerId.ToString())
-                return Unauthorized();
+                return Forbid();
+
+            if (_context.Users.Find(advert.OwnerId) == null)
+                return NotFound($"Owner with id = {advert.OwnerId} could not be found");
+
+            if (_context.Users.Find(advert.RealEstateId) == null)
+                return NotFound($"RealEstate with id = {advert.RealEstateId} could not be found");
 
             _context.Entry(advert).State = EntityState.Modified;
 
@@ -90,21 +111,34 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<Advert>> PostAdvert(Advert advert)
         {
+            if (_context.Users.Find(advert.OwnerId) == null)
+                return NotFound($"Owner with id = {advert.OwnerId} could not be found");
+
+            if (_context.Users.Find(advert.RealEstateId) == null)
+                return NotFound($"RealEstate with id = {advert.RealEstateId} could not be found");
+
             _context.Adverts.Add(advert);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAdvert", new { id = advert.Id }, advert);
+            return CreatedAtAction("PostAdvert", new
+            {
+                advert.Id,
+                advert.Description,
+                advert.LoanPrice,
+                advert.OwnerId,
+                advert.RealEstateId
+            });
         }
 
         // DELETE: api/Adverts/5
         [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Advert>> DeleteAdvert(int id)
+        public async Task<ActionResult<object>> DeleteAdvert(int id)
         {
             var advert = await _context.Adverts.FindAsync(id);
 
             if (User.FindFirst("id").Value != advert.OwnerId.ToString())
-                return Unauthorized();
+                return Forbid();
 
             if (advert == null)
             {
@@ -114,7 +148,14 @@ namespace TenancyPlatform.Controllers
             _context.Adverts.Remove(advert);
             await _context.SaveChangesAsync();
 
-            return advert;
+            return new
+            {
+                advert.Id,
+                advert.Description,
+                advert.LoanPrice,
+                advert.OwnerId,
+                advert.RealEstateId
+            };
         }
 
         private bool AdvertExists(int id)

@@ -26,14 +26,25 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Contracts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contract>>> GetContracts()
+        public async Task<ActionResult<IEnumerable<object>>> GetContracts()
         {
-            return await _context.Contracts.ToListAsync();
+            return await _context.Contracts.Select(c =>
+                new
+                {
+                    c.Id,
+                    c.Price,
+                    c.Start,
+                    c.Duration,
+                    c.TenantId,
+                    c.LandlordId,
+                    c.RealEstateId
+                }
+                ).ToListAsync();
         }
 
         // GET: api/Contracts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contract>> GetContract(int id)
+        public async Task<ActionResult<object>> GetContract(int id)
         {
             var contract = await _context.Contracts.FindAsync(id);
 
@@ -42,7 +53,16 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return contract;
+            return new
+            {
+                contract.Id,
+                contract.Price,
+                contract.Start,
+                contract.Duration,
+                contract.TenantId,
+                contract.LandlordId,
+                contract.RealEstateId
+            };
         }
 
         // PUT: api/Contracts/5
@@ -60,7 +80,16 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
 
             if (User.FindFirst("id").Value != x.LandlordId.ToString())
-                return Unauthorized();
+                return Forbid();
+
+            if(_context.Users.Find(contract.TenantId) == null)
+                return NotFound($"Tenant with id = {contract.TenantId} could not be found");
+
+            if (_context.Users.Find(contract.LandlordId) == null)
+                return NotFound($"Landlord with id = {contract.LandlordId} could not be found");
+
+            if (_context.Users.Find(contract.RealEstateId) == null)
+                return NotFound($"RealEstate with id = {contract.RealEstateId} could not be found");
 
             _context.Entry(contract).State = EntityState.Modified;
 
@@ -88,21 +117,39 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<Contract>> PostContract(Contract contract)
         {
+            if (_context.Users.Find(contract.TenantId) == null)
+                return NotFound($"Tenant with id = {contract.TenantId} could not be found");
+
+            if (_context.Users.Find(contract.LandlordId) == null)
+                return NotFound($"Landlord with id = {contract.LandlordId} could not be found");
+
+            if (_context.Users.Find(contract.RealEstateId) == null)
+                return NotFound($"RealEstate with id = {contract.RealEstateId} could not be found");
+
             _context.Contracts.Add(contract);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContract", new { id = contract.Id }, contract);
+            return CreatedAtAction("PostContract", new
+            {
+                contract.Id,
+                contract.Price,
+                contract.Start,
+                contract.Duration,
+                contract.TenantId,
+                contract.LandlordId,
+                contract.RealEstateId
+            });
         }
 
         // DELETE: api/Contracts/5
         [Authorize(Roles = "landlord")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Contract>> DeleteContract(int id)
+        public async Task<ActionResult<object>> DeleteContract(int id)
         {
             var contract = await _context.Contracts.FindAsync(id);
 
             if (User.FindFirst("id").Value != contract.LandlordId.ToString())
-                return Unauthorized();
+                return Forbid();
 
             if (contract == null)
             {
@@ -112,7 +159,16 @@ namespace TenancyPlatform.Controllers
             _context.Contracts.Remove(contract);
             await _context.SaveChangesAsync();
 
-            return contract;
+            return new
+            {
+                contract.Id,
+                contract.Price,
+                contract.Start,
+                contract.Duration,
+                contract.TenantId,
+                contract.LandlordId,
+                contract.RealEstateId
+            };
         }
 
         private bool ContractExists(int id)

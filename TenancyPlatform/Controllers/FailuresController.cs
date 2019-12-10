@@ -26,14 +26,23 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Failures
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Failure>>> GetFailures()
+        public async Task<ActionResult<IEnumerable<object>>> GetFailures()
         {
-            return await _context.Failures.ToListAsync();
+            return await _context.Failures.Select(f =>
+                new
+                {
+                    f.Id,
+                    f.Description,
+                    f.IsFixed,
+                    f.ContractId,
+                    f.ReporterId
+                }
+                ).ToListAsync();
         }
 
         // GET: api/Failures/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Failure>> GetFailure(int id)
+        public async Task<ActionResult<object>> GetFailure(int id)
         {
             var failure = await _context.Failures.FindAsync(id);
 
@@ -42,7 +51,14 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return failure;
+            return new
+            {
+                failure.Id,
+                failure.Description,
+                failure.IsFixed,
+                failure.ContractId,
+                failure.ReporterId
+            };
         }
 
         // PUT: api/Failures/5
@@ -61,7 +77,13 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
 
             if (User.FindFirst("id").Value != x.ReporterId.ToString())
-                return Unauthorized();
+                return Forbid();
+
+            if (_context.Users.Find(failure.ReporterId) == null)
+                return NotFound($"Reporter with id = {failure.ReporterId} could not be found");
+
+            if (_context.Users.Find(failure.ContractId) == null)
+                return NotFound($"Contract with id = {failure.ContractId} could not be found");
 
             _context.Entry(failure).State = EntityState.Modified;
 
@@ -89,16 +111,29 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<Failure>> PostFailure(Failure failure)
         {
+            if (_context.Users.Find(failure.ReporterId) == null)
+                return NotFound($"Reporter with id = {failure.ReporterId} could not be found");
+
+            if (_context.Users.Find(failure.ContractId) == null)
+                return NotFound($"Contract with id = {failure.ContractId} could not be found");
+
             _context.Failures.Add(failure);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFailure", new { id = failure.Id }, failure);
+            return CreatedAtAction("PostFailure", new
+            {
+                failure.Id,
+                failure.Description,
+                failure.IsFixed,
+                failure.ContractId,
+                failure.ReporterId
+            });
         }
 
         // DELETE: api/Failures/5
         [Authorize(Roles = "tenant")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Failure>> DeleteFailure(int id)
+        public async Task<ActionResult<object>> DeleteFailure(int id)
         {
             var failure = await _context.Failures.FindAsync(id);
             if (failure == null)
@@ -107,12 +142,19 @@ namespace TenancyPlatform.Controllers
             }
 
             if (User.FindFirst("id").Value != failure.ReporterId.ToString())
-                return Unauthorized();
+                return Forbid();
 
             _context.Failures.Remove(failure);
             await _context.SaveChangesAsync();
 
-            return failure;
+            return new
+            {
+                failure.Id,
+                failure.Description,
+                failure.IsFixed,
+                failure.ContractId,
+                failure.ReporterId
+            };
         }
 
         private bool FailureExists(int id)

@@ -125,21 +125,22 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<object>>> GetUsers()
         {
-            return await _context.Users.Select(x => new User
+            return await _context.Users.Select(u =>
+            new
             {
-                Id = x.Id,
-                UserName = x.UserName,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Role = x.Role
+                u.Id,
+                u.UserName,
+                u.FirstName,
+                u.LastName,
+                u.Role
             }).ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<object>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -148,8 +149,14 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            user.Password = "";
-            return user;
+            return new
+            {
+                user.Id,
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.Role
+            };
         }
 
         // PUT: api/Users/5
@@ -157,7 +164,7 @@ namespace TenancyPlatform.Controllers
         public async Task<IActionResult> PutUser(int id, User user)
         {
             if (User.FindFirst("id").Value != id.ToString())
-                return Unauthorized();
+                return Forbid();
 
             if (id != user.Id)
             {
@@ -190,19 +197,28 @@ namespace TenancyPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            if (_context.Users.Any(u => u.UserName == user.UserName))
+                return Forbid("User with such user name aldready exists");
             user.Role = "tenant";
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("PostUser", new
+            {
+                user.Id,
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.Role
+            });
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<ActionResult<object>> DeleteUser(int id)
         {
             if (User.FindFirst("id").Value != id.ToString())
-                return Unauthorized();
+                return Forbid();
 
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -213,7 +229,14 @@ namespace TenancyPlatform.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return new
+            {
+                user.Id,
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.Role
+            };
         }
 
         private bool UserExists(int id)

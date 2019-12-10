@@ -26,14 +26,22 @@ namespace TenancyPlatform.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Service>>> GetServices()
+        public async Task<ActionResult<IEnumerable<object>>> GetServices()
         {
-            return await _context.Services.ToListAsync();
+            return await _context.Services.Select(s =>
+                new
+                {
+                    s.Id,
+                    s.Description,
+                    s.Amount,
+                    s.PaymentId
+                }
+                ).ToListAsync();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Service>> GetService(int id)
+        public async Task<ActionResult<object>> GetService(int id)
         {
             var service = await _context.Services.FindAsync(id);
 
@@ -42,22 +50,37 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
-            return service;
+            return new
+            {
+                service.Id,
+                service.Description,
+                service.Amount,
+                service.PaymentId
+            };
         }
 
         // POST: api/Services
         [HttpPost]
         public async Task<ActionResult<Service>> PostService(Service service)
         {
+            if (_context.Payments.Find(service.PaymentId) == null)
+                return NotFound($"Payment with id = {service.PaymentId} could not be found");
+
             _context.Services.Add(service);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetService", new { id = service.Id }, service);
+            return CreatedAtAction("PostService", new
+            {
+                service.Id,
+                service.Description,
+                service.Amount,
+                service.PaymentId
+            });
         }
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Service>> DeleteService(int id)
+        public async Task<ActionResult<object>> DeleteService(int id)
         {
             var service = await _context.Services.Include(s => s.Payment).ThenInclude(p => p.Contract).FirstOrDefaultAsync(s => s.Id == id);
             if (service == null)
@@ -66,12 +89,18 @@ namespace TenancyPlatform.Controllers
             }
 
             if (User.FindFirst("id").Value != service.Payment.Contract.LandlordId.ToString())
-                return Unauthorized();
+                return Forbid();
 
                 _context.Services.Remove(service);
             await _context.SaveChangesAsync();
 
-            return service;
+            return new
+            {
+                service.Id,
+                service.Description,
+                service.Amount,
+                service.PaymentId
+            };
         }
 
         private bool ServiceExists(int id)
