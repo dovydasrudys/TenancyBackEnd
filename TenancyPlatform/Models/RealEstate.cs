@@ -16,6 +16,7 @@ namespace TenancyPlatform.Models
         public int Rooms { get; set; }
         public int Floor { get; set; }
         public int BuildYear { get; set; }
+        public int ImageUrl { get; set; }
 
         public int? OwnerId { get; set; }
         public User Owner { get; set; }
