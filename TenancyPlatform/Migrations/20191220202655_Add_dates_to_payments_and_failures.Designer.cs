@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TenancyPlatform.Contexts;
 
 namespace TenancyPlatform.Migrations
 {
     [DbContext(typeof(TenancyContext))]
-    partial class TenancyContextModelSnapshot : ModelSnapshot
+    [Migration("20191220202655_Add_dates_to_payments_and_failures")]
+    partial class Add_dates_to_payments_and_failures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

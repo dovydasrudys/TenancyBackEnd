@@ -11,6 +11,7 @@ namespace TenancyPlatform.Models
     {
         public int Id { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
+        public DateTime IssueDate { get; set; }
         
         public int? ContractId { get; set; }
         public Contract Contract { get; set; }

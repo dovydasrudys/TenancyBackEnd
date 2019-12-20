@@ -106,6 +106,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Contracts.Find(payment.ContractId) == null)
                 return NotFound($"Contract with id = {payment.ContractId} could not be found");
 
+            payment.IssueDate = DateTime.Now;
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 

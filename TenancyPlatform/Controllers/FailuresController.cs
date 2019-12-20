@@ -117,6 +117,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(failure.ContractId) == null)
                 return NotFound($"Contract with id = {failure.ContractId} could not be found");
 
+            failure.IssueDate = DateTime.Now;
             _context.Failures.Add(failure);
             await _context.SaveChangesAsync();
 

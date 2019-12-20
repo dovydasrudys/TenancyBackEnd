@@ -10,6 +10,7 @@ namespace TenancyPlatform.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public bool IsFixed { get; set; }
+        public DateTime IssueDate { get; set; }
 
         public int? ReporterId { get; set; }
         public User Reporter { get; set; }
