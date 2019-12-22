@@ -29,15 +29,7 @@ namespace TenancyPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetAdverts()
         {
-            return await _context.Adverts.Select(a =>
-                new {
-                    a.Id,
-                    a.Description,
-                    a.LoanPrice,
-                    a.OwnerId,
-                    a.RealEstateId
-                }
-                ).ToListAsync();
+            return await _context.Adverts.Include(a => a.RealEstate).ToListAsync();
         }
 
         // GET: api/Adverts/5
@@ -120,14 +112,9 @@ namespace TenancyPlatform.Controllers
             _context.Adverts.Add(advert);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("PostAdvert", new
-            {
-                advert.Id,
-                advert.Description,
-                advert.LoanPrice,
-                advert.OwnerId,
-                advert.RealEstateId
-            });
+            Advert adv = _context.Adverts.AsNoTracking().Include(a => a.RealEstate).FirstOrDefault(a => a.Id == advert.Id);
+
+            return CreatedAtAction("PostAdvert", adv);
         }
 
         // DELETE: api/Adverts/5

@@ -28,16 +28,13 @@ namespace TenancyPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetFailures()
         {
-            return await _context.Failures.Select(f =>
-                new
-                {
-                    f.Id,
-                    f.Description,
-                    f.IsFixed,
-                    f.ContractId,
-                    f.ReporterId
-                }
-                ).ToListAsync();
+            List<Failure> failures = await _context.Failures.Include(f => f.Contract).Include(f => f.Reporter).ToListAsync();
+            foreach (var failure in failures)
+            {
+                failure.Reporter.Password = null;
+            }
+
+            return failures;
         }
 
         // GET: api/Failures/5
@@ -57,7 +54,8 @@ namespace TenancyPlatform.Controllers
                 failure.Description,
                 failure.IsFixed,
                 failure.ContractId,
-                failure.ReporterId
+                failure.ReporterId,
+                failure.IssueDate
             };
         }
 
@@ -82,7 +80,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(failure.ReporterId) == null)
                 return NotFound($"Reporter with id = {failure.ReporterId} could not be found");
 
-            if (_context.Users.Find(failure.ContractId) == null)
+            if (_context.Contracts.Find(failure.ContractId) == null)
                 return NotFound($"Contract with id = {failure.ContractId} could not be found");
 
             _context.Entry(failure).State = EntityState.Modified;
@@ -114,10 +112,9 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(failure.ReporterId) == null)
                 return NotFound($"Reporter with id = {failure.ReporterId} could not be found");
 
-            if (_context.Users.Find(failure.ContractId) == null)
+            if (_context.Contracts.Find(failure.ContractId) == null)
                 return NotFound($"Contract with id = {failure.ContractId} could not be found");
 
-            failure.IssueDate = DateTime.Now;
             _context.Failures.Add(failure);
             await _context.SaveChangesAsync();
 
@@ -127,7 +124,8 @@ namespace TenancyPlatform.Controllers
                 failure.Description,
                 failure.IsFixed,
                 failure.ContractId,
-                failure.ReporterId
+                failure.ReporterId,
+                failure.IssueDate
             });
         }
 
@@ -154,7 +152,8 @@ namespace TenancyPlatform.Controllers
                 failure.Description,
                 failure.IsFixed,
                 failure.ContractId,
-                failure.ReporterId
+                failure.ReporterId,
+                failure.IssueDate
             };
         }
 

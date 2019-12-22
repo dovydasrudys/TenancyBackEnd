@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using TenancyPlatform.Contexts;
 using TenancyPlatform.Helpers;
 using TenancyPlatform.Services;
@@ -33,7 +34,11 @@ namespace TenancyPlatform
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             services.AddDbContext<TenancyContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:Tenancy"]));
 
             // configure strongly typed settings objects

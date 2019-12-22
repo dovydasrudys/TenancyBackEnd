@@ -28,41 +28,28 @@ namespace TenancyPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetContracts()
         {
-            return await _context.Contracts.Select(c =>
-                new
-                {
-                    c.Id,
-                    c.Price,
-                    c.Start,
-                    c.Duration,
-                    c.TenantId,
-                    c.LandlordId,
-                    c.RealEstateId
-                }
-                ).ToListAsync();
+            List<Contract> contracts = await _context.Contracts.Include(c => c.Landlord).Include(c => c.Tenant).Include(c => c.RealEstate).ToListAsync();
+            foreach (var contract in contracts)
+            {
+                contract.Landlord.Password = null;
+                contract.Tenant.Password = null;
+            }
+
+            return contracts;
         }
 
         // GET: api/Contracts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetContract(int id)
         {
-            var contract = await _context.Contracts.FindAsync(id);
+            var contract = _context.Contracts.Include(c => c.RealEstate).FirstOrDefault(c => c.Id == id);
 
             if (contract == null)
             {
                 return NotFound();
             }
 
-            return new
-            {
-                contract.Id,
-                contract.Price,
-                contract.Start,
-                contract.Duration,
-                contract.TenantId,
-                contract.LandlordId,
-                contract.RealEstateId
-            };
+            return contract;
         }
 
         // PUT: api/Contracts/5
@@ -129,16 +116,12 @@ namespace TenancyPlatform.Controllers
             _context.Contracts.Add(contract);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("PostContract", new
-            {
-                contract.Id,
-                contract.Price,
-                contract.Start,
-                contract.Duration,
-                contract.TenantId,
-                contract.LandlordId,
-                contract.RealEstateId
-            });
+            Contract c = _context.Contracts.AsNoTracking().Include(x => x.RealEstate).Include(x => x.Tenant).Include(x => x.Landlord).FirstOrDefault(x => x.Id == contract.Id);
+
+            c.Landlord.Password = null;
+            c.Tenant.Password = null;
+
+            return CreatedAtAction("PostContract", c);
         }
 
         // DELETE: api/Contracts/5
@@ -156,19 +139,17 @@ namespace TenancyPlatform.Controllers
                 return NotFound();
             }
 
+            List<Failure> failures = _context.Failures.Where(f => f.ContractId == id).ToList();
+            List<Payment> payments = _context.Payments.Where(p => p.ContractId == id).ToList();
+            List<Service> services = _context.Services.Where(s => payments.FirstOrDefault(p => p.Id == s.PaymentId) != null).ToList();
+            _context.Failures.RemoveRange(failures);
+            _context.Services.RemoveRange(services);
+            _context.Payments.RemoveRange(payments);
+
             _context.Contracts.Remove(contract);
             await _context.SaveChangesAsync();
 
-            return new
-            {
-                contract.Id,
-                contract.Price,
-                contract.Start,
-                contract.Duration,
-                contract.TenantId,
-                contract.LandlordId,
-                contract.RealEstateId
-            };
+            return contract;
         }
 
         private bool ContractExists(int id)

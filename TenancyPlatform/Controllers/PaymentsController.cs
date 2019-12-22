@@ -28,14 +28,7 @@ namespace TenancyPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetPayments()
         {
-            return await _context.Payments.Select(p =>
-                new
-                {
-                    p.Id,
-                    p.ContractId,
-                    p.PaymentStatus
-                }
-                ).ToListAsync();
+            return await _context.Payments.Include(p => p.Services).ToListAsync();
         }
 
         // GET: api/Payments/5
