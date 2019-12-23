@@ -74,7 +74,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(advert.OwnerId) == null)
                 return NotFound($"Owner with id = {advert.OwnerId} could not be found");
 
-            if (_context.Users.Find(advert.RealEstateId) == null)
+            if (_context.RealEstates.Find(advert.RealEstateId) == null)
                 return NotFound($"RealEstate with id = {advert.RealEstateId} could not be found");
 
             _context.Entry(advert).State = EntityState.Modified;
@@ -106,7 +106,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(advert.OwnerId) == null)
                 return NotFound($"Owner with id = {advert.OwnerId} could not be found");
 
-            if (_context.Users.Find(advert.RealEstateId) == null)
+            if (_context.RealEstates.Find(advert.RealEstateId) == null)
                 return NotFound($"RealEstate with id = {advert.RealEstateId} could not be found");
 
             _context.Adverts.Add(advert);

@@ -75,7 +75,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(contract.LandlordId) == null)
                 return NotFound($"Landlord with id = {contract.LandlordId} could not be found");
 
-            if (_context.Users.Find(contract.RealEstateId) == null)
+            if (_context.RealEstates.Find(contract.RealEstateId) == null)
                 return NotFound($"RealEstate with id = {contract.RealEstateId} could not be found");
 
             _context.Entry(contract).State = EntityState.Modified;
@@ -110,7 +110,7 @@ namespace TenancyPlatform.Controllers
             if (_context.Users.Find(contract.LandlordId) == null)
                 return NotFound($"Landlord with id = {contract.LandlordId} could not be found");
 
-            if (_context.Users.Find(contract.RealEstateId) == null)
+            if (_context.RealEstates.Find(contract.RealEstateId) == null)
                 return NotFound($"RealEstate with id = {contract.RealEstateId} could not be found");
 
             _context.Contracts.Add(contract);
