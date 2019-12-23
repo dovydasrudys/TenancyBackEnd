@@ -80,7 +80,8 @@ namespace TenancyPlatform.Contexts
                     Area = 80,
                     BuildYear = 2007,
                     Rooms = 3,
-                    OwnerId = 1
+                    OwnerId = 1,
+                    ImageUrl = "http://www.interjeroprojektas.lt/get.php?i.799:w.749:h.500"
                 },
                 new RealEstate
                 {
@@ -93,7 +94,8 @@ namespace TenancyPlatform.Contexts
                     Area = 45,
                     BuildYear = 1999,
                     Rooms = 1,
-                    OwnerId = 1
+                    OwnerId = 1,
+                    ImageUrl = "http://www.interjeroprojektas.lt/get.php?i.799:w.749:h.500"
                 },
                 new RealEstate
                 {
@@ -106,7 +108,8 @@ namespace TenancyPlatform.Contexts
                     Area = 60,
                     BuildYear = 2011,
                     Rooms = 2,
-                    OwnerId = 2
+                    OwnerId = 2,
+                    ImageUrl = "http://www.interjeroprojektas.lt/get.php?i.799:w.749:h.500"
                 }
             );
 
@@ -122,17 +125,25 @@ namespace TenancyPlatform.Contexts
                 new Advert
                 {
                     Id = 2,
-                    Description = "",
+                    Description = "Ieškome nuomininko be vaikų ir gyvūnų.",
                     LoanPrice = 220,
                     OwnerId = 2,
-                    RealEstateId = 2
+                    RealEstateId = 3
                 },
                 new Advert
                 {
                     Id = 3,
                     Description = "Išnuomuojame ilgalaikei nuomai butą varpų 11-36, šalia prekybos centro, butas labai šiltas ir sauletas, rakinama laiptine, patogus susisiekimas aplink daug mokyklų, su baldais.",
                     LoanPrice = 230,
-                    OwnerId = 3,
+                    OwnerId = 1,
+                    RealEstateId = 2
+                },
+                new Advert
+                {
+                    Id = 4,
+                    Description = "Jaukus butas. Mažos šildymo kainos. Geras susisiekimas su miesto centru.",
+                    LoanPrice = 280,
+                    OwnerId = 2,
                     RealEstateId = 3
                 }
             );
@@ -221,13 +232,15 @@ namespace TenancyPlatform.Contexts
                 {
                     Id = 1,
                     ContractId = 1,
-                    PaymentStatus = PaymentStatus.Paid
+                    PaymentStatus = PaymentStatus.Paid,
+                    IssueDate = new DateTime(2019, 02, 28)
                 },
                 new Payment
                 {
                     Id = 2,
                     ContractId = 1,
-                    PaymentStatus = PaymentStatus.NotPaid
+                    PaymentStatus = PaymentStatus.NotPaid,
+                    IssueDate = new DateTime(2019, 03, 28)
                 }
             );
 
@@ -239,6 +252,16 @@ namespace TenancyPlatform.Contexts
                     Description = "Sugedusi durų spyna",
                     ReporterId = 3,
                     IsFixed = false,
+                    IssueDate = new DateTime(2019, 03, 16)
+                },
+                new Failure
+                {
+                    Id = 2,
+                    ContractId = 1,
+                    Description = "Šaldytuvo kamera nebešaldo",
+                    ReporterId = 3,
+                    IsFixed = true,
+                    IssueDate = new DateTime(2019, 02, 05)
                 }
             );
         }
