@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>8894fd75-ebfc-412c-99c3-2a50756b4874</UserSecretsId>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>tenancyplatform.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 

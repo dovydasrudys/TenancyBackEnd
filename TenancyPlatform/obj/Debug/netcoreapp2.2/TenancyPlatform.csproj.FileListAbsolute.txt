@@ -58,3 +58,17 @@ C:\Users\Stud\Desktop\Tenancy\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreap
 C:\Users\Stud\Desktop\Tenancy\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorTargetAssemblyInfo.cache
 C:\Users\Stud\Desktop\Tenancy\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.dll
 C:\Users\Stud\Desktop\Tenancy\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.pdb
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.deps.json
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.runtimeconfig.json
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.runtimeconfig.dev.json
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.dll
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\bin\Debug\netcoreapp2.2\TenancyPlatform.pdb
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.csprojAssemblyReference.cache
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.csproj.CoreCompileInputs.cache
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorAssemblyInfo.cache
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorAssemblyInfo.cs
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.AssemblyInfoInputs.cache
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.AssemblyInfo.cs
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.RazorTargetAssemblyInfo.cache
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.dll
+C:\Users\Dovydas\Desktop\TenancyBackEnd\TenancyPlatform\obj\Debug\netcoreapp2.2\TenancyPlatform.pdb
